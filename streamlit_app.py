@@ -1,6 +1,12 @@
 import streamlit as st
 import time
+import firebase_admin
+from firebase_admin import credentials,firestore
 
+if not firebase_admin._apps:
+    cred = credentials.Certificate("firebase.json")
+    firebase_admin.initialize_app(cred)
+db= firestore.client()
 # ===============================
 # CONFIGURAÇÃO DA PÁGINA
 # ===============================
@@ -97,6 +103,16 @@ if enviar:
     st.write(f"🌊 Importância da preservação: {opiniao}")
     st.write(f"💬 Comentário: {comentario}")
     st.balloons()
+    db.collection("formulario").add(
+        {
+            "nome":nome,
+            "idade":idade,
+            "turma":turma,
+            "email":email,
+            "opniao":opiniao,
+            "comentario":comentario   
+        }
+    )
     
     import streamlit as st
 import time
@@ -457,3 +473,4 @@ planeta, garantindo um ambiente mais equilibrado e sustentável para as próxima
 # ===============================
 st.success("🌍 Proteger a vida na água é proteger a vida na Terra.")
 st.balloons()
+
